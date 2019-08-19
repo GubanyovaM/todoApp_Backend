@@ -7,8 +7,19 @@ public class ToDoItem implements Serializable{
 		private String text;
 		private boolean finished;
 		private String createdAt;
+		private String id;
 		
 		
+		public String getId() {
+			return id;
+		}
+
+
+		public void setId(String id) {
+			this.id = id;
+		}
+
+
 		@Override
 		public String toString() {
 			return "TodoItem [title=" + title + ", text=" + text + ", finished=" + finished + ", createdAt=" + createdAt

@@ -6,6 +6,8 @@ import java.time.format.FormatStyle;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,8 +31,8 @@ public class ToDoListController {
 			this.repository = repository;
 		}
 		
-		@RequestMapping(value ="todos.json", method = RequestMethod.POST)
-		public SaveResponse addTodoItem(@RequestBody ToDoItem request) {
+		@RequestMapping(value ="todos", method = RequestMethod.POST)
+		public String addTodoItem(@RequestBody ToDoItem request) {
 			ToDoItemValidator.validate(request);
 			
 			LocalDateTime now = LocalDateTime.now();
@@ -38,41 +40,42 @@ public class ToDoListController {
 			String prettyDateTime = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).format(now);
 			request.setCreatedAt(prettyDateTime);
 			
-			String name = UUID.randomUUID().toString();
+			String id = UUID.randomUUID().toString();
 			System.out.println("Aha co som dostala: " + request);
-			SaveResponse response = new SaveResponse();
-			response.setName(name);
+		//	SaveResponse response = new SaveResponse();
+	//		response.setName(name);
 			
 			// save to database
-			DbToDoItem dbToDoItem = ToDoItemConverter.jsonToDbEntity(request, name);
+			DbToDoItem dbToDoItem = ToDoItemConverter.jsonToDbEntity(request, id);
 			repository.save(dbToDoItem);
 			
-			return response;
+			return id;
 		}
 		
 	
-		@RequestMapping(value ="todos.json", method = RequestMethod.GET)
-		public Map<String, ToDoItem> fetchAllToDoItems() {
+		@RequestMapping(value ="todos", method = RequestMethod.GET)
+		public List<ToDoItem> fetchAllToDoItems() {
 			Iterable<DbToDoItem> dbToDoItemList = repository.findAll();
 
-			   Map<String, ToDoItem> toDoItemsMap = new HashMap<String, ToDoItem>();
+			   List<ToDoItem> toDoItem = new ArrayList<ToDoItem>();
 
 			   for (DbToDoItem dbToDoItem : dbToDoItemList) {
-				  ToDoItem toDoItem = ToDoItemConverter.dbEntityToJson(dbToDoItem);
-			      toDoItemsMap.put(dbToDoItem.getIdentifier(), toDoItem);
+				  toDoItem.add(ToDoItemConverter.dbEntityToJson(dbToDoItem));
+				 /* ToDoItem toDoItem = ToDoItemConverter.dbEntityToJson(dbToDoItem);
+			      toDoItemsMap.put(dbToDoItem.getIdentifier(), toDoItem);*/
 			   }
-			   return toDoItemsMap;
+			   return toDoItem;
 		}
 		
 		
-		@RequestMapping(value ="/todos/{identifier}.json", 
+		@RequestMapping(value ="/todos/{identifier}", 
 				method = RequestMethod.DELETE)
 		public void deleteToDoItem(@PathVariable String identifier) {
 			repository.deleteById(identifier);
 		}
 		
 		
-		@RequestMapping(value ="/todos/{identifier}.json", 
+		@RequestMapping(value ="/todos/{identifier}", 
 				method = RequestMethod.PATCH)
 		public void updateToDoItem(@PathVariable String identifier, 
 				@RequestBody UpdateRequest requestBody) {
