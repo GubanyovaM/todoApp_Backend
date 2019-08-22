@@ -36,12 +36,15 @@ public class ToDoListController {
 			ToDoItemValidator.validate(request);
 			
 			LocalDateTime now = LocalDateTime.now();
-			
-			String prettyDateTime = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).format(now);
+			String prettyDateTime = DateTimeFormatter.ISO_DATE_TIME.format(now);
+
+		//	String prettyDateTime = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).format(now);
 			request.setCreatedAt(prettyDateTime);
 			
 			String id = UUID.randomUUID().toString();
 			System.out.println("Aha co som dostala: " + request);
+			
+
 		//	SaveResponse response = new SaveResponse();
 	//		response.setName(name);
 			
