@@ -13,8 +13,16 @@ public class DbToDoItem {
 	    private String text;
 	    private boolean finished;
 	    private String createdAt;
+	    private String importance;
+	    private String labels;
 	   
 	   
+		public String getLabels() {
+			return labels;
+		}
+		public void setLabels(String labels) {
+			this.labels = labels;
+		}
 		public String getIdentifier() {
 			return identifier;
 		}
@@ -44,6 +52,12 @@ public class DbToDoItem {
 		}
 		public void setCreatedAt(String createdAt) {
 			this.createdAt = createdAt;
+		}
+		public String getImportance() {
+			return importance;
+		}
+		public void setImportance(String importance) {
+			this.importance = importance;
 		}
 
 

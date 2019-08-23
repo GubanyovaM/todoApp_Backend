@@ -5,6 +5,7 @@ import com.accenture.letovit.todolist.ToDoItem;
 public class ToDoItemValidator {
 	
 	public static void validate(ToDoItem toDoItem) {
+		
 		if (toDoItem.getTitle().length() > 15) {
 			throw new RuntimeException("chyba...dlhyy titulok");
 		}

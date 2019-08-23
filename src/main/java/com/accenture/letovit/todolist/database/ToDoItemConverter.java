@@ -11,7 +11,8 @@ public class ToDoItemConverter {
 	      output.setFinished(input.isFinished());
 	      output.setText(input.getText());
 	      output.setTitle(input.getTitle());
-
+	      output.setImportance(input.getImportance());
+	      output.setLabels(input.getLabels());
 	      output.setIdentifier(identifier);
 
 	      return output;
@@ -24,7 +25,8 @@ public class ToDoItemConverter {
 	      output.setFinished(input.isFinished());
 	      output.setText(input.getText());
 	      output.setTitle(input.getTitle());
-	      
+	      output.setImportance(input.getImportance());
+	      output.setLabels(input.getLabels());
 	      output.setId(input.getIdentifier());
 
 	      return output;

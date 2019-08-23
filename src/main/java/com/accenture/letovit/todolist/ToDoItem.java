@@ -8,8 +8,20 @@ public class ToDoItem implements Serializable{
 		private boolean finished;
 		private String createdAt;
 		private String id;
+		private String importance;
+		private String labels;
 		
 		
+		public String getImportance() {
+			return importance;
+		}
+
+
+		public void setImportance(String importance) {
+			this.importance = importance;
+		}
+
+
 		public String getId() {
 			return id;
 		}
@@ -23,7 +35,7 @@ public class ToDoItem implements Serializable{
 		@Override
 		public String toString() {
 			return "TodoItem [title=" + title + ", text=" + text + ", finished=" + finished + ", createdAt=" + createdAt
-					+ "]";
+					+ ", importance=" + importance + ", labels=" + labels + "]";
 		}
 
 
@@ -64,6 +76,16 @@ public class ToDoItem implements Serializable{
 
 		public void setCreatedAt(String createdAt) {
 			this.createdAt = createdAt;
+		}
+
+
+		public String getLabels() {
+			return labels;
+		}
+
+
+		public void setLabels(String labels) {
+			this.labels = labels;
 		}
 		
 		
