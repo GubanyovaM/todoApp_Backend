@@ -16,8 +16,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.accenture.letovit.todolist.database.DbLabel;
+import com.accenture.letovit.todolist.database.DbLabelRepository;
 import com.accenture.letovit.todolist.database.DbToDoItem;
 import com.accenture.letovit.todolist.database.DbToDoItemRepository;
+import com.accenture.letovit.todolist.database.LabelConverter;
 import com.accenture.letovit.todolist.database.ToDoItemConverter;
 import com.accenture.letovit.todolist.validator.ToDoItemValidator;
 
@@ -26,10 +29,14 @@ import com.accenture.letovit.todolist.validator.ToDoItemValidator;
 public class ToDoListController {
 	
 		private DbToDoItemRepository repository;
+		private DbLabelRepository repositoryLabel;
 
-		public ToDoListController(DbToDoItemRepository repository) {
+		public ToDoListController(DbToDoItemRepository repository, DbLabelRepository repositoryLabel) {
 			this.repository = repository;
+			this.repositoryLabel = repositoryLabel;
 		}
+		
+		
 		
 		@RequestMapping(value ="todos", method = RequestMethod.POST)
 		public String addTodoItem(@RequestBody ToDoItem request) {
@@ -55,6 +62,17 @@ public class ToDoListController {
 			return id;
 		}
 		
+		@RequestMapping(value ="labels", method = RequestMethod.POST)
+		public String addLabel(@RequestBody Label request) {
+				
+			String id = UUID.randomUUID().toString();
+			System.out.println("Aha co som dostala label: " + request);
+			
+			DbLabel dbLabel = LabelConverter.jsonToDbEntity(request, id);
+			repositoryLabel.save(dbLabel);
+			
+			return id;
+		}
 	
 		@RequestMapping(value ="todos", method = RequestMethod.GET)
 		public List<ToDoItem> fetchAllToDoItems() {
@@ -70,6 +88,17 @@ public class ToDoListController {
 			   return toDoItem;
 		}
 		
+		@RequestMapping(value ="labels", method = RequestMethod.GET)
+		public List<Label> fetchAllLabels() {
+			Iterable<DbLabel> dbLabelList = repositoryLabel.findAll();
+
+			   List<Label> label = new ArrayList<Label>();
+
+			   for (DbLabel dbLabel : dbLabelList) {
+				  label.add(LabelConverter.dbEntityToJson(dbLabel));
+			   }
+			   return label;
+		}
 		
 		@RequestMapping(value ="/todos/{identifier}", 
 				method = RequestMethod.DELETE)
